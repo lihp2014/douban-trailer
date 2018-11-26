@@ -1,0 +1,27 @@
+{
+  "name": "douban-trailer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lihp2014/douban-trailer.git"
+  },
+  "keywords": [
+    "movie",
+    "trail"
+  ],
+  "author": "lql",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lihp2014/douban-trailer/issues"
+  },
+  "homepage": "https://github.com/lihp2014/douban-trailer#readme",
+  "dependencies": {
+    "koa": "^2.6.2"
+  }
+}

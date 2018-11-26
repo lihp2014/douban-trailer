@@ -1,0 +1,15 @@
+# node.js
+#
+node_modules/
+
+# logs
+npm-debug.log
+
+# nuxt generate
+dist
+
+# system
+.DS_Store
+
+# build
+build
