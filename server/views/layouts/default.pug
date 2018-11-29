@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    meta(chaset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    block title
+    include ../includes/style
+  body
+  block content
+    .container
+      .row
+        .col-md-8
+          h1 Hi #{you}
+          p This is #{me}
+        .col-md-4
+          p 测试动态PUG模板引擎
