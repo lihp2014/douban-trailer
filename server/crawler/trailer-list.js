@@ -33,21 +33,21 @@ const sleep = time => new Promise(resolve => {
     var items = $('.list-wp a')
     var links = [];
 
-    // if (items && items.length >= 1) {
-    //   items.each((index, item) => {
-    //     console.log(it);
-    //     let doubanId = it.find('div').data('id')
-    //     let title = it.find('.title').text()
-    //     let rate = Number(it.find('.rate').text())
-    //     let poster = it.find('img').attr('src').replace('s_ratio', 'l_ratio')
+    if (items && items.length >= 1) {
+      items.each((index, item) => {
+        let it = $(item)
+        let doubanId = it.find('div').data('id')
+        let title = it.find('.title').text()
+        let rate = Number(it.find('.rate').text())
+        let poster = it.find('img').attr('src').replace('s_ratio', 'l_ratio')
 
-    //     links.push({
-    //       doubanId,
-    //       title,
-    //       poster
-    //     })
-    //   })
-    // }
+        links.push({
+          doubanId,
+          title,
+          poster
+        })
+      })
+    }
 
     return links
   })
