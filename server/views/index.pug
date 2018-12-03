@@ -138,11 +138,13 @@ block content
             }
           })
         } else {
-          player.switchVideo({
-            url: video,
-            pic: image,
-            type: 'auto'
-          })
+          if (play.video.currentSrc !== video) {
+            player.switchVideo({
+              url: video,
+              pic: image,
+              type: 'auto'
+            })
+          }
         }
       })
     })
