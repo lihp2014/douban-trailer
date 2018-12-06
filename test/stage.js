@@ -1,4 +1,4 @@
-const { feadFile } = require('fs')
+const { readFile } = require('fs')
 const EventEmitter = require('events')
 
 class EE extends EventEmitter {}
