@@ -6,7 +6,7 @@ class EE extends EventEmitter {}
 const yy = new EE()
 
 yy.on('event', () => {
-  console.log('大师')
+  console.log('event触发事件')
 })
 
 setTimeout(() => {
