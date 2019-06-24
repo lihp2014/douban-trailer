@@ -21,4 +21,15 @@
 ### 怎样启动子进程
 ### 进程间如何通信
 
+## 数据库
+
+#### MongodDB 由小到大
+- document
+- collection
+- database
+
+#### Mongoose 由小到大
+- schema
+- model
+- entity
 
