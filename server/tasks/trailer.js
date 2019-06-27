@@ -2,6 +2,12 @@ const cp = require('child_process')
 const { resolve } = require('path')
 
 ;(async () => {
+  let movies = await Movie.find({
+    $or: [
+      { video: { $exists: false }},
+      { video: null }
+    ]
+  })
   const script = resolve(__dirname, '../crawler/video')
   const child = cp.fork(script, [])
   let invoked = false
@@ -25,5 +31,7 @@ const { resolve } = require('path')
     let result = data.result
     console.log(result)
   })
+
+  child.send(movies)
 
 })()

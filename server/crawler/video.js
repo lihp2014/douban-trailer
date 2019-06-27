@@ -8,7 +8,9 @@ const sleep = time => new Promise(resolve => {
   setTimeout(resolve, time)
 })
 
-;(async () => {
+// ;(async () => {
+process.on('message', async movies => {
+
   console.log('start')
 
   const browser = await puppeteer.launch({
@@ -17,58 +19,63 @@ const sleep = time => new Promise(resolve => {
   })
 
   const page = await browser.newPage()
-  await page.goto(base + doubanId, {
-    waitUntil: 'networkidle2'
-  })
 
-  await sleep(1000)
+  for (let i = 0; i < movies.length; i++) {
+    let doubanId = movies[i].doubanId
 
-  const result = await page.evaluate(() => {
-    var $ = window.$
-    var it = $('.related-pic-video')
-
-    if (it && it.length) {
-      var link = it.attr('href')
-      var cover = it.css('background-image').replace('url("','').replace('?")','');
-      return {
-        link,
-        cover
-      }
-    }
-
-    return {}
-  })
-
-  let video
-
-  if (result.link) {
-    await page.goto(result.link, {
+    await page.goto(base + doubanId, {
       waitUntil: 'networkidle2'
     })
-    await sleep(2000)
-
-    video = await page.evaluate(() => {
+  
+    await sleep(1000)
+  
+    const result = await page.evaluate(() => {
       var $ = window.$
-      var it = $('source')
-
+      var it = $('.related-pic-video')
+  
       if (it && it.length) {
-        return it.attr('src')
+        var link = it.attr('href')
+        var cover = it.css('background-image').replace('url("','').replace('?")','');
+        return {
+          link,
+          cover
+        }
       }
-
-      return ''
+  
+      return {}
     })
-  }
-
-  const data = {
-    video,
-    doubanId,
-    cover: result.cover
+  
+    let video
+  
+    if (result.link) {
+      await page.goto(result.link, {
+        waitUntil: 'networkidle2'
+      })
+      await sleep(2000)
+  
+      video = await page.evaluate(() => {
+        var $ = window.$
+        var it = $('source')
+  
+        if (it && it.length) {
+          return it.attr('src')
+        }
+  
+        return ''
+      })
+    }
+  
+    const data = {
+      video,
+      doubanId,
+      cover: result.cover
+    }
+  
+    console.log(data)
+    process.send(data)
   }
 
   browser.close()
-
-  console.log(data)
-
-  // process.send(data)
-  // process.exit(0)
+  process.exit(0)
+  
 })()
