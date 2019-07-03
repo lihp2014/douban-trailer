@@ -2,6 +2,7 @@ const cp = require('child_process')
 const { resolve } = require('path')
 const mongoose = require('mongoose')
 const Movie = mongoose.model('Movie')
+const Category = mongoose.model('Category')
 
 ;(async () => {
   let movies = await Movie.find({
@@ -52,8 +53,13 @@ const Movie = mongoose.model('Movie')
           name: type
         })
 
-        if (cat) {
-          
+        if (cat && cat.movies) {
+          let idx = cat.movies.indexOf(movie._id)
+          if ( idx > -1) {
+            cat.movies = cat.movies.splice(idx, 1)
+          }
+
+          await cat.save()
         }
       }
     }

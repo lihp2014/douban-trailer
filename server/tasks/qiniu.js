@@ -1,6 +1,8 @@
 const qiniu = require('qiniu')
 const nanoid = require('nanoid')
 const config = require('../config')
+const mongoose = require('mongoose')
+const Movie = mongoose.model('Movie')
 
 const bucket = config.qiniu.bucket
 const mac = new qiniu.auth.digest.Mac(config.qiniu.AK, config.qiniu.SK)
@@ -24,15 +26,18 @@ const uploadToQiniu= async (url, key) => {
 }
 
 ;(async () => {
-  let movies = [{
-    video: 'http://vt1.doubanio.com/201812041704/ca1ade81790827fbb3a6629d9231e61e/view/movie/M/402390838.mp4',
-    doubanId: '27603700',
-    cover: 'https://img1.doubanio.com/img/trailer/medium/2540984268.jpg',
-    poster: 'https://img1.doubanio.com/view/photo/l_ratio_poster/public/p2540548908.jpg'
-  }]
+  let movies = await Movie.find({
+    $or: [
+      { videoKey: { $exists: false }},
+      { videoKey: null },
+      { videoKey: '' },
+    ]
+  })
 
-  movies.map(async movie => {
-    if (movie.video && !movie.key) {
+
+  for (let i = 0; i< movies.length; i++) {
+    let movie = movies[i]
+    if (movie.video && !movie.videoKey) {
       try {
         console.log('开始上传video')
         let videoData = await uploadToQiniu(movie.video, nanoid() + '.mp4')
@@ -52,19 +57,14 @@ const uploadToQiniu= async (url, key) => {
         }
 
         console.log(movie)
-        {
-          video: 'http://vt1.doubanio.com/201812041704/ca1ade81790827fbb3a6629d9231e61e/view/movie/M/402390838.mp4',
-          doubanId: '27603700',
-          cover: 'https://img1.doubanio.com/img/trailer/medium/2540984268.jpg',
-          poster: 'https://img1.doubanio.com/view/photo/l_ratio_poster/public/p2540548908.jpg',
-          videoKey: 'http://pj7v2wp6k.bkt.clouddn.com/ORc2w_cCJP1zBFvyM0aIU.mp4',
-          coverKey: 'http://pj7v2wp6k.bkt.clouddn.com/CqdC0ZjHeU0fJYO6kfFoa.png',
-          posterKey: 'http://pj7v2wp6k.bkt.clouddn.com/8wTCMq6X4HCZRmpssCLTw.png'
-        }
+        await movie.save()
       } catch (err) {
         console.log(err)
       }
 
     }
+  }
+  movies.map(async movie => {
+    
   })
 })()
